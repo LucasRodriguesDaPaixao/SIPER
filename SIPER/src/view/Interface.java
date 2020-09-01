@@ -50,14 +50,14 @@ public class Interface extends javax.swing.JFrame {
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 740, 350, 100));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/hamburger (1).png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 330, 317));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/logo.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 290));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/be198dc0292e73bbf8f6936e74994b62.png"))); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 630, 280, 170));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 510, 280, 170));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/WhatsApp Image 2020-08-22 at 20.21.54.jpeg"))); // NOI18N
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 160, 620, 500));
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/burger(1).png"))); // NOI18N
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 80, 510, 500));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/texto(1).png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 500, 200));
@@ -66,7 +66,12 @@ public class Interface extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 500, 200));
 
         jButton5.setBackground(new java.awt.Color(51, 51, 255));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/WhatsApp Image 2020-08-22 at 20.21.12.jpeg"))); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/imagens/background.png"))); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1400, 900));
 
         pack();
@@ -77,6 +82,10 @@ public class Interface extends javax.swing.JFrame {
         this.dispose();
         new view.Pedidos().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
