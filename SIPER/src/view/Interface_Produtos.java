@@ -5,6 +5,9 @@
  */
 package view;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Gabriel Brune
@@ -211,6 +214,15 @@ public class Interface_Produtos extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        JButton jb = new JButton();
+        jb.setSize(200, 200);
+        jb.setVisible(true);
+//        JFrame jf = new JFrame();//construindo o objeto
+//        jf.setTitle("Interface");//titulo da interface
+//        jf.setSize(900, 800);//passar o tamanho da da interface 1° parametro = largura, 2° altura
+//        jf.setVisible(true);//passar um boolean com a visibilidade da interface
+//        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//para fechar o programa ao clicar no X
+        
         btn= 1;
     }//GEN-LAST:event_jButton2ActionPerformed
 
