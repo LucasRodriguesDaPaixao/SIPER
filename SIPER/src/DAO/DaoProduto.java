@@ -6,6 +6,7 @@
 package DAO;
 
 import Factory.ConnectionFactory;
+import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,5 +32,26 @@ public class DaoProduto {
             throw new RuntimeException(error);
        }
     }
-    
+     
+
+public ResultSet imagem (String id){
+    String sql = "Select * from imagem where  idimagem = (?)";
+      ResultSet dados;
+        try{
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            stmt.setString(1, id);
+            dados = stmt.executeQuery();
+            return dados;
+        }catch(SQLException error){
+            throw new RuntimeException(error);
 }
+}
+
+
+
+
+           
+       
+}
+
+
