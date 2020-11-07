@@ -82,6 +82,7 @@ public class Interface extends JFrame
             @Override
             public void actionPerformed(ActionEvent evt) {
                 btnEntrarClick(evt);
+                
             }
         });
         
@@ -140,7 +141,7 @@ public class Interface extends JFrame
     private void btnEntrarClick(ActionEvent evt)
     {
         this.dispose();
-        //new InterfacePedidos().setVisible(true);
+        new InterfaceLogin().setVisible(true);
     }
 }
 
