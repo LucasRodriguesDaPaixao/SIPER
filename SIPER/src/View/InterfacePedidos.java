@@ -7,15 +7,18 @@
 package View;
 
 import DAO.DaoProduto;
+import DAO.DaoCarrinho;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author lucas
  */
 public class InterfacePedidos extends javax.swing.JFrame {
+    private Object JOptionpane;
 
     /** Creates new form InterfacePedidos */
     public InterfacePedidos() {
@@ -23,8 +26,10 @@ public class InterfacePedidos extends javax.swing.JFrame {
         carregarlista();
         carregarlista2();
         carregarlista3();
+        carregarimagem();
+ 
     }
-    public void carregarlista(){
+    public void carregarimagem(){
         DefaultTableModel modelo = (DefaultTableModel) tblBebida.getModel();
         modelo.setNumRows(0);
            
@@ -40,6 +45,7 @@ public class InterfacePedidos extends javax.swing.JFrame {
                        dados.getString(2),
                        dados.getString(3),
                        dados.getString(4)
+                       
                    });
                }
 
@@ -97,6 +103,30 @@ public class InterfacePedidos extends javax.swing.JFrame {
 
            }
     }
+     
+      public void carregarlista(){
+        DefaultTableModel modelo = (DefaultTableModel) tblLista.getModel();
+        modelo.setNumRows(0);
+           
+           DAO.DaoCarrinho itensCliente = new DaoCarrinho();
+           ResultSet dados = itensCliente.listar();
+
+           
+           try{
+               //função para verificar o tanto de itens que tem em "dados"
+               while(dados.next()){
+                   modelo.addRow(new Object[]{
+                       dados.getString(1),
+                       dados.getString(4),
+                       dados.getString(5),
+                          });
+               }
+            }catch(SQLException error){
+              throw new RuntimeException(error);
+
+           }
+    }
+              
        /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -117,16 +147,25 @@ public class InterfacePedidos extends javax.swing.JFrame {
         btnLimpar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblLista = new javax.swing.JTable();
+        btnDeletar = new javax.swing.JButton();
+        labelImagem2 = new javax.swing.JLabel();
         panelBebida = new javax.swing.JPanel();
-        tblBebidas = new javax.swing.JButton();
+        btncomprar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBebida = new javax.swing.JTable();
-        panelLanche = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tblLanche = new javax.swing.JTable();
+        labelImagem = new javax.swing.JLabel();
         panelRefeicao = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblRefeicao = new javax.swing.JTable();
+        btncomprar2 = new javax.swing.JButton();
+        labelImagem3 = new javax.swing.JLabel();
+        panelLanche = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblLanche = new javax.swing.JTable();
+        btncomprar1 = new javax.swing.JButton();
+        labelImagem1 = new javax.swing.JLabel();
         lblTexto = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
 
@@ -146,11 +185,9 @@ public class InterfacePedidos extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(15, 10, 10, 0);
         getContentPane().add(logo, gridBagConstraints);
 
-        jInternalFrame2.setPreferredSize(new java.awt.Dimension(600, 250));
         jInternalFrame2.setVisible(true);
 
         tbdMenu.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-        tbdMenu.setPreferredSize(new java.awt.Dimension(590, 250));
         tbdMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -160,8 +197,6 @@ public class InterfacePedidos extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-
-        panelPedido.setLayout(new java.awt.GridBagLayout());
 
         javax.swing.GroupLayout panelCompraLayout = new javax.swing.GroupLayout(panelCompra);
         panelCompra.setLayout(panelCompraLayout);
@@ -173,14 +208,6 @@ public class InterfacePedidos extends javax.swing.JFrame {
             panelCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weighty = 1.0;
-        panelPedido.add(panelCompra, gridBagConstraints);
 
         panelBtn.setLayout(new java.awt.GridBagLayout());
 
@@ -214,19 +241,82 @@ public class InterfacePedidos extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         panelBtn.add(lblTotal, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weightx = 1.0;
-        panelPedido.add(panelBtn, gridBagConstraints);
+        tblLista.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo", "preço", "Nome"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(tblLista);
+
+        btnDeletar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/delete.png"))); // NOI18N
+        btnDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletarActionPerformed(evt);
+            }
+        });
+
+        labelImagem2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        labelImagem2.setText("DELETAR");
+
+        javax.swing.GroupLayout panelPedidoLayout = new javax.swing.GroupLayout(panelPedido);
+        panelPedido.setLayout(panelPedidoLayout);
+        panelPedidoLayout.setHorizontalGroup(
+            panelPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPedidoLayout.createSequentialGroup()
+                .addGroup(panelPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPedidoLayout.createSequentialGroup()
+                        .addComponent(panelCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelPedidoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPedidoLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelImagem2)
+                                .addGap(29, 29, 29)))
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 732, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelPedidoLayout.createSequentialGroup()
+                        .addGap(624, 624, 624)
+                        .addComponent(panelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(120, Short.MAX_VALUE))
+        );
+        panelPedidoLayout.setVerticalGroup(
+            panelPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPedidoLayout.createSequentialGroup()
+                .addGroup(panelPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPedidoLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(panelPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelPedidoLayout.createSequentialGroup()
+                                .addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelImagem2))
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelPedidoLayout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(panelCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(145, 145, 145)
+                .addComponent(panelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         tbdMenu.addTab("Lista de Pedidos", new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/carrinho-de-compras.png")), panelPedido); // NOI18N
 
-        tblBebidas.setText("Bebidas");
-        tblBebidas.addActionListener(new java.awt.event.ActionListener() {
+        btncomprar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/purchase (1).png"))); // NOI18N
+        btncomprar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tblBebidasActionPerformed(evt);
+                btncomprarActionPerformed(evt);
             }
         });
 
@@ -235,11 +325,11 @@ public class InterfacePedidos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Nome", "Preço", "Categoria"
+                "Codigo", "Nome", "Preço", "categoria"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -248,67 +338,36 @@ public class InterfacePedidos extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblBebida);
 
+        labelImagem.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        labelImagem.setText("COMPRAR");
+
         javax.swing.GroupLayout panelBebidaLayout = new javax.swing.GroupLayout(panelBebida);
         panelBebida.setLayout(panelBebidaLayout);
         panelBebidaLayout.setHorizontalGroup(
             panelBebidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBebidaLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(tblBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(213, 213, 213))
+                .addContainerGap()
+                .addGroup(panelBebidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btncomprar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelImagem))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 746, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(125, Short.MAX_VALUE))
         );
         panelBebidaLayout.setVerticalGroup(
             panelBebidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBebidaLayout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(tblBebidas, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBebidaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(208, 208, 208))
+                .addContainerGap()
+                .addGroup(panelBebidaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBebidaLayout.createSequentialGroup()
+                        .addComponent(btncomprar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelImagem))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(178, Short.MAX_VALUE))
         );
 
         tbdMenu.addTab("Bebidas", new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/soda.png")), panelBebida); // NOI18N
-
-        tblLanche.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Codigo", "Nome", "Preço", "Categoria"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane3.setViewportView(tblLanche);
-
-        javax.swing.GroupLayout panelLancheLayout = new javax.swing.GroupLayout(panelLanche);
-        panelLanche.setLayout(panelLancheLayout);
-        panelLancheLayout.setHorizontalGroup(
-            panelLancheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLancheLayout.createSequentialGroup()
-                .addGap(73, 73, 73)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelLancheLayout.setVerticalGroup(
-            panelLancheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLancheLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
-        );
-
-        tbdMenu.addTab("Lanches", new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/lanche.png")), panelLanche); // NOI18N
 
         tblRefeicao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -328,35 +387,115 @@ public class InterfacePedidos extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(tblRefeicao);
 
+        btncomprar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/purchase (1).png"))); // NOI18N
+        btncomprar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncomprar2ActionPerformed(evt);
+            }
+        });
+
+        labelImagem3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        labelImagem3.setText("COMPRAR");
+
         javax.swing.GroupLayout panelRefeicaoLayout = new javax.swing.GroupLayout(panelRefeicao);
         panelRefeicao.setLayout(panelRefeicaoLayout);
         panelRefeicaoLayout.setHorizontalGroup(
             panelRefeicaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRefeicaoLayout.createSequentialGroup()
-                .addGap(149, 149, 149)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(panelRefeicaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btncomprar2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelImagem3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(78, 78, 78))
         );
         panelRefeicaoLayout.setVerticalGroup(
             panelRefeicaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRefeicaoLayout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 66, Short.MAX_VALUE))
+                .addGroup(panelRefeicaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelRefeicaoLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btncomprar2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelImagem3))
+                    .addGroup(panelRefeicaoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(176, Short.MAX_VALUE))
         );
 
         tbdMenu.addTab("Refeição", new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/almoco.png")), panelRefeicao); // NOI18N
+
+        tblLanche.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo", "Nome", "Preço", "Categoria"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tblLanche);
+
+        btncomprar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/purchase (1).png"))); // NOI18N
+        btncomprar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncomprar1ActionPerformed(evt);
+            }
+        });
+
+        labelImagem1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        labelImagem1.setText("COMPRAR");
+
+        javax.swing.GroupLayout panelLancheLayout = new javax.swing.GroupLayout(panelLanche);
+        panelLanche.setLayout(panelLancheLayout);
+        panelLancheLayout.setHorizontalGroup(
+            panelLancheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLancheLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelLancheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btncomprar1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelLancheLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(labelImagem1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 680, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(183, Short.MAX_VALUE))
+        );
+        panelLancheLayout.setVerticalGroup(
+            panelLancheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLancheLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelLancheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelLancheLayout.createSequentialGroup()
+                        .addComponent(btncomprar1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelImagem1)))
+                .addContainerGap(175, Short.MAX_VALUE))
+        );
+
+        tbdMenu.addTab("Lanches", new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/lanche.png")), panelLanche); // NOI18N
 
         javax.swing.GroupLayout jInternalFrame2Layout = new javax.swing.GroupLayout(jInternalFrame2.getContentPane());
         jInternalFrame2.getContentPane().setLayout(jInternalFrame2Layout);
         jInternalFrame2Layout.setHorizontalGroup(
             jInternalFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tbdMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 784, Short.MAX_VALUE)
+            .addComponent(tbdMenu, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jInternalFrame2Layout.setVerticalGroup(
             jInternalFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jInternalFrame2Layout.createSequentialGroup()
-                .addComponent(tbdMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addComponent(tbdMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -384,11 +523,11 @@ public class InterfacePedidos extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 1178, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 599, Short.MAX_VALUE)
+            .addGap(0, 719, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -406,13 +545,105 @@ public class InterfacePedidos extends javax.swing.JFrame {
 
     private void tbdMenuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tbdMenuAncestorAdded
         // TODO add your handling code here:
+        System.out.println("oie");
     }//GEN-LAST:event_tbdMenuAncestorAdded
 
-    private void tblBebidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tblBebidasActionPerformed
-        // TODO add your handling code here:
+    private void btncomprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncomprarActionPerformed
+                // TODO add your handling code here:
+        Model.Carrinho carrinho = new Model.Carrinho();
+        String codigo,nome,preco,pedidos,produto;
+        int linha = tblBebida.getSelectedRow();
+        codigo = (String) tblBebida.getValueAt(linha,0);
+        nome  = (String) tblBebida.getValueAt(linha,1);
+        preco = (String) tblBebida.getValueAt(linha,2);
        
+        
+        
+        carrinho.setNome(nome);
+        carrinho.setPreço(preco);
+        carrinho.setProduto(codigo);
+        carrinho.setPedido("1");
+        
+        DaoCarrinho  adicionar = new DaoCarrinho();
+        adicionar.adicionar(carrinho);
+        
+        this.dispose();
+        this.setVisible(true);
+        carregarlista();
+       /* 
+       
+        System.out.println(carrinho.getNome());
+        System.out.println(carrinho.getPreço());
+        System.out.println(carrinho.getProduto());
+        System.out.println(carrinho.getPedido());
+        
+        
+        */
+      
 
-    }//GEN-LAST:event_tblBebidasActionPerformed
+    }//GEN-LAST:event_btncomprarActionPerformed
+
+    private void btncomprar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncomprar2ActionPerformed
+         Model.Carrinho carrinho = new Model.Carrinho();
+        String codigo,nome,preco,pedidos,produto;
+        int linha = tblRefeicao.getSelectedRow();
+        codigo = (String) tblRefeicao.getValueAt(linha,0);
+        nome  = (String) tblRefeicao.getValueAt(linha,1);
+        preco = (String) tblRefeicao.getValueAt(linha,2);
+        System.out.println(nome);
+        System.out.println(preco);
+        System.out.println(codigo);
+        
+        
+        
+        carrinho.setNome(nome);
+        carrinho.setPreço(preco);
+        carrinho.setProduto(codigo);
+        carrinho.setPedido("2");
+        
+        DaoCarrinho  adicionar = new DaoCarrinho();
+        adicionar.adicionar(carrinho);
+        carregarlista();
+    }//GEN-LAST:event_btncomprar2ActionPerformed
+
+    private void btncomprar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncomprar1ActionPerformed
+        Model.Carrinho carrinho = new Model.Carrinho();
+        String codigo,nome,preco,pedidos,produto;
+        int linha = tblLanche.getSelectedRow();
+        codigo = (String) tblLanche.getValueAt(linha,0);
+        nome  = (String) tblLanche.getValueAt(linha,1);
+        preco = (String) tblLanche.getValueAt(linha,2);
+       
+        
+        
+        carrinho.setNome(nome);
+        carrinho.setPreço(preco);
+        carrinho.setProduto(codigo);
+        carrinho.setPedido("2");
+        
+        DaoCarrinho  adicionar = new DaoCarrinho();
+        adicionar.adicionar(carrinho);
+        carregarlista();
+        
+    }//GEN-LAST:event_btncomprar1ActionPerformed
+
+    private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
+        // TODO add your handling code here:
+        if (tblLista.getSelectedRow()<=0){
+            JOptionPane.showMessageDialog(null, "Selecione uma linha da tabela");
+            System.out.println("passou pelo if");
+         } else {
+            int linha = tblLista.getSelectedRow();
+            int id = Integer.parseInt((String) tblLista.getValueAt(linha, 0));
+            DAO.DaoCarrinho excluirProduto = new DAO.DaoCarrinho();
+            excluirProduto.excluirProduto(id);
+            System.out.println(id);
+            System.out.println("passou por aqui");
+
+            carregarlista();
+
+        }
+    }//GEN-LAST:event_btnDeletarActionPerformed
     private void panelBebidaActionPerformed(javax.swing.event.AncestorEvent evt) {                                      
     
     }
@@ -428,7 +659,7 @@ public class InterfacePedidos extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Metal".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -448,19 +679,31 @@ public class InterfacePedidos extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new InterfacePedidos().setVisible(true);
+               
             }
         });
+        
+     
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeletar;
     private javax.swing.JButton btnFnzCompra;
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btncomprar;
+    private javax.swing.JButton btncomprar1;
+    private javax.swing.JButton btncomprar2;
     private javax.swing.JInternalFrame jInternalFrame2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JLabel labelImagem;
+    private javax.swing.JLabel labelImagem1;
+    private javax.swing.JLabel labelImagem2;
+    private javax.swing.JLabel labelImagem3;
     private javax.swing.JLabel lblTexto;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel logo;
@@ -472,8 +715,8 @@ public class InterfacePedidos extends javax.swing.JFrame {
     private javax.swing.JPanel panelRefeicao;
     private javax.swing.JTabbedPane tbdMenu;
     private javax.swing.JTable tblBebida;
-    private javax.swing.JButton tblBebidas;
     private javax.swing.JTable tblLanche;
+    private javax.swing.JTable tblLista;
     private javax.swing.JTable tblRefeicao;
     // End of variables declaration//GEN-END:variables
 
