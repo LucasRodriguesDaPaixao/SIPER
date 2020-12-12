@@ -9,6 +9,7 @@ import Factory.ConnectionFactory;
 import Model.Cliente;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
@@ -55,6 +56,23 @@ public class DaoLogin {
         catch(SQLException e)
         {
             JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    public ResultSet retornarIdCliente()
+    {
+        String sql = "SELECT (count(*) + 1) from cliente";
+        ResultSet dados;
+        
+        try
+        {
+            PreparedStatement stmt = conexao.prepareStatement(sql);
+            dados = stmt.executeQuery();
+            return dados;
+        }
+        catch(SQLException e)
+        {
+            throw new RuntimeException(e);
         }
     }
 }

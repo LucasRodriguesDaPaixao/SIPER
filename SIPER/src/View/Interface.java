@@ -77,24 +77,8 @@ public class Interface extends JFrame
             btnEntrarClick(evt);
         });
         
-        btnEntrar.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                btnEntrarClick(evt);
-                
-            }
-        });
-        
         gbc.weightx = 1;
         gbc.weighty = 1;
-        
-        /*btnBG.setBackground(new Color(51, 51, 255));
-        btnBG.setIcon(new ImageIcon(getClass().getResource("/View/Imagens/background.png")));
-        btnBG.setDisabledIcon(btnBG.getIcon());
-        btnBG.setEnabled(false);*/
-        //add(addComponent(btnBG, 0, 0, 0, 0, GridBagConstraints.BOTH));
-
         
         lblLogo.setIcon(new ImageIcon(getClass().getResource("/View/Imagens/logo.png")));
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;

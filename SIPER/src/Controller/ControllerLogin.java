@@ -7,6 +7,9 @@ package Controller;
 
 import DAO.DaoLogin;
 import Model.Cliente;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JLabel;
 
 /**
  *
@@ -15,6 +18,7 @@ import Model.Cliente;
 public class ControllerLogin
 {
     private final View.InterfaceLogin tela;
+    //private final View.InterfacePedidos telaPedido;
     
     public ControllerLogin(View.InterfaceLogin tela)
     {
@@ -51,9 +55,24 @@ public class ControllerLogin
                 
                 daoLogin.adicionarComCpf(cliente);
             }
-            
-            tela.dispose();
-            new View.InterfacePedidos().setVisible(true);
+        }
+    }
+    
+    public void recebeIdCliente(JLabel id)
+    {
+        DaoLogin daoLogin = new DaoLogin();
+        ResultSet dados = daoLogin.retornarIdCliente();
+        try
+        {
+            while(dados.next())
+            {
+                String str = dados.getString(1);
+                id.setText(str);
+            }
+        }
+        catch(SQLException error){
+           throw new RuntimeException(error);
+
         }
     }
     

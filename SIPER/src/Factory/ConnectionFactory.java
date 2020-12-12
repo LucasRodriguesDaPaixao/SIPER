@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class ConnectionFactory {
      public static Connection getConnection(){
         final String myServer = "jdbc:mysql://127.0.0.1/siper";
-      ;
+
         final String user = "root";
         final String psw = "";
         

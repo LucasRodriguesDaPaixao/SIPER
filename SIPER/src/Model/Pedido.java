@@ -12,12 +12,22 @@ package Model;
 public class Pedido
 {
     private double valorTotal;
-
-    public Pedido(double valorTotal)
+    private int fkCliente;
+    
+    public Pedido(double valorTotal, int fkCliente)
     {
         this.valorTotal = valorTotal;
+        this.fkCliente = fkCliente;
     }
 
+    public int getFkCliente() {
+        return fkCliente;
+    }
+
+    public void setFkCliente(int fkCliente) {
+        this.fkCliente = fkCliente;
+    }
+    
     public double getValorTotal() 
     {
         return valorTotal;

@@ -5,7 +5,9 @@
  */
 package View;
 
-import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 
 /**
  *
@@ -13,15 +15,30 @@ import javax.swing.JPanel;
  */
 public class InterfaceCozinheiro extends javax.swing.JFrame {
     private final Controller.ControllerCozinheiro controllerCozinheiro;
+    
+    int delay = 10000;
+    Timer timer;
+    ActionListener taskPerformer = new ActionListener()
+    {
+        public void actionPerformed(ActionEvent evt)
+        {
+            controllerCozinheiro.PreencheTabela(tblPedidos);
+        }
+    };
+    
     /**
      * Creates new form InterfaceCozinheiro
      */
     public InterfaceCozinheiro() {
         initComponents();
-        
+        tbdMenu.remove(panelOrdem);
         controllerCozinheiro = new Controller.ControllerCozinheiro(this);
+        controllerCozinheiro.PreencheTabela(tblPedidos);
+        
+        this.timer = new Timer(delay, taskPerformer);
+        timer.start();
+        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,7 +50,6 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         logo = new javax.swing.JLabel();
-        lblTexto = new javax.swing.JLabel();
         jInternalFrame = new javax.swing.JInternalFrame();
         tbdMenu = new javax.swing.JTabbedPane();
         panelPedido = new javax.swing.JPanel();
@@ -41,6 +57,22 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
         tblPedidos = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btnPedido = new javax.swing.JButton();
+        panelOrdem = new javax.swing.JPanel();
+        panelStatus = new javax.swing.JPanel();
+        cboStatus = new javax.swing.JComboBox<>();
+        btnAttStatus = new javax.swing.JButton();
+        lblStatus = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblItens = new javax.swing.JTable();
+        panelBotoes = new javax.swing.JPanel();
+        panelFinalizar = new javax.swing.JPanel();
+        btnFinalizar = new javax.swing.JButton();
+        lblFinalizar = new javax.swing.JLabel();
+        panelCancelar = new javax.swing.JPanel();
+        btnCancelar = new javax.swing.JButton();
+        lblCancelar = new javax.swing.JLabel();
+        lblIdPedido = new javax.swing.JLabel();
+        lblLinha = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -58,16 +90,6 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(15, 10, 10, 0);
         getContentPane().add(logo, gridBagConstraints);
 
-        lblTexto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/ctgAlimento.png"))); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(lblTexto, gridBagConstraints);
-
         jInternalFrame.setPreferredSize(new java.awt.Dimension(600, 250));
         jInternalFrame.setVisible(true);
 
@@ -75,8 +97,7 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
 
         tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Nome", "Pedido", "Preço", "Status do Pedido"
@@ -92,11 +113,17 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
         });
         tblPedidos.setColumnSelectionAllowed(true);
         tblPedidos.getTableHeader().setReorderingAllowed(false);
+        tblPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPedidosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPedidos);
         tblPedidos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         btnPedido.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnPedido.setText("Acessar Pedido");
+        btnPedido.setEnabled(false);
         btnPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedidoActionPerformed(evt);
@@ -120,7 +147,7 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
         panelPedido.setLayout(panelPedidoLayout);
         panelPedidoLayout.setHorizontalGroup(
             panelPedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         panelPedidoLayout.setVerticalGroup(
@@ -134,11 +161,193 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
 
         tbdMenu.addTab("Lista de Pedidos", new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/carrinho-de-compras.png")), panelPedido); // NOI18N
 
+        panelOrdem.setEnabled(false);
+
+        cboStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Em espera", "Em andamento" }));
+
+        btnAttStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnAttStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/atualizada.png"))); // NOI18N
+        btnAttStatus.setText("Atualizar status");
+        btnAttStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAttStatusActionPerformed(evt);
+            }
+        });
+
+        lblStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblStatus.setText("Status");
+
+        javax.swing.GroupLayout panelStatusLayout = new javax.swing.GroupLayout(panelStatus);
+        panelStatus.setLayout(panelStatusLayout);
+        panelStatusLayout.setHorizontalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelStatusLayout.createSequentialGroup()
+                .addGroup(panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelStatusLayout.createSequentialGroup()
+                        .addComponent(lblStatus)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(cboStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelStatusLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnAttStatus)))
+                .addGap(2, 2, 2))
+        );
+        panelStatusLayout.setVerticalGroup(
+            panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelStatusLayout.createSequentialGroup()
+                .addComponent(lblStatus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAttStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 28, Short.MAX_VALUE))
+        );
+
+        tblItens.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nome", "Quantidade"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblItens);
+
+        btnFinalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/confirme.png"))); // NOI18N
+        btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarActionPerformed(evt);
+            }
+        });
+
+        lblFinalizar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblFinalizar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFinalizar.setText("Finalizar");
+
+        javax.swing.GroupLayout panelFinalizarLayout = new javax.swing.GroupLayout(panelFinalizar);
+        panelFinalizar.setLayout(panelFinalizarLayout);
+        panelFinalizarLayout.setHorizontalGroup(
+            panelFinalizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnFinalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFinalizarLayout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addComponent(lblFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        panelFinalizarLayout.setVerticalGroup(
+            panelFinalizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFinalizarLayout.createSequentialGroup()
+                .addComponent(btnFinalizar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblFinalizar))
+        );
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/cancelar.png"))); // NOI18N
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        lblCancelar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblCancelar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCancelar.setText("Cancelar");
+
+        javax.swing.GroupLayout panelCancelarLayout = new javax.swing.GroupLayout(panelCancelar);
+        panelCancelar.setLayout(panelCancelarLayout);
+        panelCancelarLayout.setHorizontalGroup(
+            panelCancelarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCancelarLayout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addComponent(lblCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        panelCancelarLayout.setVerticalGroup(
+            panelCancelarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCancelarLayout.createSequentialGroup()
+                .addComponent(btnCancelar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblCancelar))
+        );
+
+        javax.swing.GroupLayout panelBotoesLayout = new javax.swing.GroupLayout(panelBotoes);
+        panelBotoes.setLayout(panelBotoesLayout);
+        panelBotoesLayout.setHorizontalGroup(
+            panelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(panelCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        panelBotoesLayout.setVerticalGroup(
+            panelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBotoesLayout.createSequentialGroup()
+                .addGroup(panelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(panelFinalizar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelCancelar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 52, Short.MAX_VALUE))
+        );
+
+        lblIdPedido.setFont(new java.awt.Font("Tahoma", 0, 3)); // NOI18N
+
+        lblLinha.setFont(new java.awt.Font("Tahoma", 0, 3)); // NOI18N
+
+        javax.swing.GroupLayout panelOrdemLayout = new javax.swing.GroupLayout(panelOrdem);
+        panelOrdem.setLayout(panelOrdemLayout);
+        panelOrdemLayout.setHorizontalGroup(
+            panelOrdemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOrdemLayout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelOrdemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelOrdemLayout.createSequentialGroup()
+                        .addGroup(panelOrdemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelOrdemLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(panelOrdemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(panelBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(panelOrdemLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(lblIdPedido)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOrdemLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblLinha)
+                        .addGap(72, 72, 72))))
+        );
+        panelOrdemLayout.setVerticalGroup(
+            panelOrdemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelOrdemLayout.createSequentialGroup()
+                .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(lblIdPedido)
+                .addGap(9, 9, 9)
+                .addComponent(lblLinha)
+                .addGap(26, 26, 26)
+                .addComponent(panelBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+
+        tbdMenu.addTab("", new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/ordem.png")), panelOrdem); // NOI18N
+
         javax.swing.GroupLayout jInternalFrameLayout = new javax.swing.GroupLayout(jInternalFrame.getContentPane());
         jInternalFrame.getContentPane().setLayout(jInternalFrameLayout);
         jInternalFrameLayout.setHorizontalGroup(
             jInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tbdMenu)
+            .addGroup(jInternalFrameLayout.createSequentialGroup()
+                .addComponent(tbdMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 786, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jInternalFrameLayout.setVerticalGroup(
             jInternalFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,26 +386,88 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void btnPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidoActionPerformed
+        int coluna = 1;
+        int linha = tblPedidos.getSelectedRow();
+        
+        String pedido =  tblPedidos.getValueAt(linha, coluna).toString();
+        
+        controllerCozinheiro.ListaPedidos(tblItens, pedido);
+        
+        // Definições de controle para tabela itens
+        lblIdPedido.setText(tblPedidos.getValueAt(linha, coluna).toString());
+        lblLinha.setText(String.valueOf(linha));
+        
         InstanciaAbaOrdem();
-        
-        
+        tbdMenu.setSelectedIndex(1);
     }//GEN-LAST:event_btnPedidoActionPerformed
 
+    private void tblPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPedidosMouseClicked
+        btnPedido.setEnabled(true);
+    }//GEN-LAST:event_tblPedidosMouseClicked
+
+    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
+        exibeMensagem("Deseja finalizar o pedido? ", "Atenção", 1);
+    }//GEN-LAST:event_btnFinalizarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        tbdMenu.remove(panelOrdem);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAttStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAttStatusActionPerformed
+        exibeMensagem("Deseja atualizar o status do pedido? ", "Atenção", 2);
+    }//GEN-LAST:event_btnAttStatusActionPerformed
+    
+    public void exibeMensagem(String msg, String titulo, int opcao)
+    {
+        int btnConfirma = JOptionPane.showConfirmDialog(null, msg, titulo, JOptionPane.YES_NO_OPTION);
+        switch(opcao)
+        {
+            case 1:
+                if (btnConfirma == JOptionPane.YES_OPTION)
+                {
+                    finalizarPedido();
+                }
+                break;
+            case 2:
+                if (btnConfirma == JOptionPane.YES_OPTION)
+                {
+                    atualizaStatus();
+                }
+                break;
+        }
+    }
+    
+    private void atualizaStatus()
+    {
+        int cboIndex = cboStatus.getSelectedIndex();
+        int id = Integer.valueOf(lblIdPedido.getText());
+        
+        
+        controllerCozinheiro.AttStatus(cboIndex, id);
+        int linha = Integer.valueOf(lblLinha.getText());
+        
+        tblPedidos.setValueAt(cboStatus.getItemAt(cboIndex), linha, 3);
+    }
+    
+    private void finalizarPedido()
+    {
+        int id = Integer.valueOf(lblIdPedido.getText());
+        
+        controllerCozinheiro.AttStatus(id);
+        int linha = Integer.valueOf(lblLinha.getText());
+        
+        tblPedidos.setValueAt("Finalizado", linha, 3);
+        tbdMenu.remove(panelOrdem);
+    }
+    
     private void InstanciaAbaOrdem()
     {
-        JPanel panelOrdem = new JPanel();
-       
-        tbdMenu.addTab("Ordem", panelOrdem);
-        //Verifica se possui mais de uma aba aberta e fecha a aba anterior
-        if(tbdMenu.getTabCount() >= 3)
-        {
-            tbdMenu.removeTabAt(1);
-        }
-        
-        
+        tbdMenu.add(panelOrdem);
+        tbdMenu.setIconAt(1 ,new ImageIcon(getClass().getResource("/View/Imagens/ordem.png")));
     }
+    
     /**
      * @param args the command line arguments
      */
@@ -233,15 +504,30 @@ public class InterfaceCozinheiro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAttStatus;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnPedido;
+    private javax.swing.JComboBox<String> cboStatus;
     private javax.swing.JInternalFrame jInternalFrame;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblTexto;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblCancelar;
+    private javax.swing.JLabel lblFinalizar;
+    private javax.swing.JLabel lblIdPedido;
+    private javax.swing.JLabel lblLinha;
+    private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel logo;
+    private javax.swing.JPanel panelBotoes;
+    private javax.swing.JPanel panelCancelar;
+    private javax.swing.JPanel panelFinalizar;
+    private javax.swing.JPanel panelOrdem;
     private javax.swing.JPanel panelPedido;
+    private javax.swing.JPanel panelStatus;
     private javax.swing.JTabbedPane tbdMenu;
+    private javax.swing.JTable tblItens;
     private javax.swing.JTable tblPedidos;
     // End of variables declaration//GEN-END:variables
 }

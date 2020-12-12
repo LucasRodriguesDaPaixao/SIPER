@@ -22,6 +22,8 @@ public class InterfaceLogin extends javax.swing.JFrame {
         initComponents();
         
         controllerLogin = new Controller.ControllerLogin(this);
+        
+        controllerLogin.recebeIdCliente(lblIdCliente);
     }
 
     /**
@@ -43,6 +45,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
         txtBoxCPF = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        lblIdCliente = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 51, 255));
@@ -51,7 +54,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Nome*:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -62,7 +65,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("CPF:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 1.0;
@@ -72,8 +75,9 @@ public class InterfaceLogin extends javax.swing.JFrame {
 
         txtBoxNome.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.weightx = 1.0;
@@ -112,7 +116,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/Imagens/burger.png"))); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 1.0;
@@ -128,14 +132,20 @@ public class InterfaceLogin extends javax.swing.JFrame {
         txtBoxCPF.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
         txtBoxCPF.setName(""); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(txtBoxCPF, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBackground(new java.awt.Color(5, 127, 178));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblIdCliente.setFont(new java.awt.Font("Tahoma", 0, 1)); // NOI18N
+        jPanel1.add(lblIdCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 160, 120));
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -149,7 +159,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 4.0;
@@ -163,8 +173,14 @@ public class InterfaceLogin extends javax.swing.JFrame {
 
         String nome = txtBoxNome.getText();
         String cpf = txtBoxCPF.getText();
+        String id = lblIdCliente.getText();
         
         controllerLogin.verificaCliente(nome, cpf);
+        
+        
+        new View.InterfacePedidos(id).setVisible(true);
+        System.out.println("Primeiro Print: " + id);
+        this.dispose();
         
     }//GEN-LAST:event_btnEntrarActionPerformed
 
@@ -172,6 +188,8 @@ public class InterfaceLogin extends javax.swing.JFrame {
     {
         JOptionPane.showMessageDialog(null, msg);
     }
+    
+    
     
     /**
      * @param args the command line arguments
@@ -216,6 +234,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    public javax.swing.JLabel lblIdCliente;
     private javax.swing.JFormattedTextField txtBoxCPF;
     private javax.swing.JTextField txtBoxNome;
     // End of variables declaration//GEN-END:variables
